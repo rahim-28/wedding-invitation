@@ -18,6 +18,8 @@ function App() {
     seconds: "00",
   })
 
+//...
+
   const [wishes, setWishes] = useState([])
   const [showCalendar, setShowCalendar] = useState(false)
   const [showLocation, setShowLocation] = useState(false)
