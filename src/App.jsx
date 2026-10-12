@@ -6,6 +6,17 @@ import "react-calendar/dist/Calendar.css"
 import nikahSong from "./assets/nikah.mp3"
 import "@fortawesome/fontawesome-free/css/all.min.css"
 
+// ---------- EVENT DETAILS (edit here in future) ----------
+const STORAGE_KEY = "nikah_wishes_arifin_naseeha_v2"
+const EVENT = {
+  title: "Nikah of Arifin & Naseeha",
+  venueName: "Kader Deluxe Mahal",
+  venueArea: "Ramanathapuram",
+  startISO: "2026-12-27T11:00:00",
+  startCal: "20261227T110000",
+  endCal: "20261227T123000",
+}
+const MAP_QUERY = "Kader Deluxe Mahal Ramanathapuram"
 
 function App() {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,8 +28,6 @@ function App() {
     minutes: "00",
     seconds: "00",
   })
-
-//...
 
   const [wishes, setWishes] = useState([])
   const [showCalendar, setShowCalendar] = useState(false)
@@ -33,37 +42,21 @@ function App() {
   const audioRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
-  // Load wishes
+  // Load wishes (starts empty, no sample wishes)
   useEffect(() => {
-    const savedWishes = localStorage.getItem("nikah_wishes_riyasdeen_athifa")
-
-    if (savedWishes) {
-      setWishes(JSON.parse(savedWishes))
-    } else {
-      const sampleWishes = [
-        {
-          name: "Sarah & Ahmed",
-          message:
-            "MashAllah! May Allah bless your union with endless love, happiness, and barakah.",
-        },
-        {
-          name: "Fatima Rahman",
-          message:
-            "Congratulations on your Nikah! May Allah grant you both love and understanding.",
-        },
-      ]
-
-      setWishes(sampleWishes)
-      localStorage.setItem(
-        "nikah_wishes_riyasdeen_athifa",
-        JSON.stringify(sampleWishes)
-      )
+    try {
+      const savedWishes = localStorage.getItem(STORAGE_KEY)
+      if (savedWishes) {
+        setWishes(JSON.parse(savedWishes))
+      }
+    } catch (err) {
+      setWishes([])
     }
   }, [])
 
   // Countdown
   useEffect(() => {
-    const weddingDate = new Date("2026-03-29T11:00:00").getTime()
+    const weddingDate = new Date(EVENT.startISO).getTime()
 
     const timer = setInterval(() => {
       const now = new Date().getTime()
@@ -162,15 +155,12 @@ function App() {
     }
 
     const newWishes = [
-      { name: wishForm.name, message: wishForm.message },
+      { name: wishForm.name.trim(), message: wishForm.message.trim() },
       ...wishes,
     ]
 
     setWishes(newWishes)
-    localStorage.setItem(
-      "nikah_wishes_riyasdeen_athifa",
-      JSON.stringify(newWishes)
-    )
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newWishes))
 
     setWishForm({ name: "", message: "" })
     setShowWishForm(false)
@@ -191,35 +181,35 @@ function App() {
           <div className="opening-title">THE SOLEMNISATION OF NIKAH</div>
 
           <div className="opening-names">
-            Riyasdeen
+            Arifin
             <span className="opening-ampersand">&</span>
-            Athifa
+            Naseeha
           </div>
 
           <button
             className="open-button"
-onClick={() => {
-  document.querySelector(".opening-screen")?.classList.add("fade-out")
+            onClick={() => {
+              document
+                .querySelector(".opening-screen")
+                ?.classList.add("fade-out")
 
-  setTimeout(() => {
-    setIsOpen(true)
-    setShowMain(true)
+              setTimeout(() => {
+                setIsOpen(true)
+                setShowMain(true)
 
-    setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.6
-        audioRef.current.play()
-        setIsPlaying(true)
-      }
-    }, 300)
-  }, 900)
-}}
-
+                setTimeout(() => {
+                  if (audioRef.current) {
+                    audioRef.current.volume = 0.6
+                    audioRef.current.play()
+                    setIsPlaying(true)
+                  }
+                }, 300)
+              }, 900)
+            }}
           >
             OPEN
           </button>
         </div>
-
       </div>
     )
   }
@@ -242,8 +232,6 @@ onClick={() => {
             ❤
           </span>
         ))}
-       
-
       </div>
 
       <div className="main-card">
@@ -253,20 +241,20 @@ onClick={() => {
             <div className="hero-title">THE SOLEMNISATION OF NIKAH</div>
 
             <div className="couple-names">
-              Riyasdeen
+              Arifin
               <span className="couple-ampersand">&</span>
-              Athifa
+              Naseeha
             </div>
 
             <div className="event-date-hero">
-              Sunday <br /> 29 March 2026
+              Sunday <br /> 27 December 2026
             </div>
 
-            <div className="event-venue-hero">Yafa Mahal</div>
+            <div className="event-venue-hero">Kader Deluxe Mahal</div>
           </div>
         </div>
 
-        {/* 🎵 Music Player (inside card, scrolls normally) */}
+        {/* 🎵 Music Player */}
         <div className="music-wrapper reveal">
           <div className="music-player" onClick={toggleMusic}>
             <span className="music-icon">
@@ -278,10 +266,9 @@ onClick={() => {
             </span>
 
             <span className="music-dots">•••</span>
-          
           </div>
         </div>
-          <audio ref={audioRef} src={nikahSong} loop />
+        <audio ref={audioRef} src={nikahSong} loop />
 
         {/* Content Section */}
         <div className="content-section reveal">
@@ -291,9 +278,9 @@ onClick={() => {
 
           <div className="family-section">
             <div className="family-title">Groom's Family</div>
-            <div className="parent-name">Shajahan Gani</div>
+            <div className="parent-name">Barakath Ali</div>
             <div className="name-divider"></div>
-            <div className="parent-name">Asiya Beevi</div>
+            <div className="parent-name">Thahjibunnisha</div>
           </div>
 
           <div
@@ -309,9 +296,9 @@ onClick={() => {
 
           <div className="family-section">
             <div className="family-title">Bride's Family</div>
-            <div className="parent-name">Ayub Khan</div>
+            <div className="parent-name">Naleem Ahmed</div>
             <div className="name-divider"></div>
-            <div className="parent-name">Thaslema Banu</div>
+            <div className="parent-name">Ayisha</div>
           </div>
 
           <div className="invitation-text">
@@ -320,23 +307,23 @@ onClick={() => {
             we cordially invite you to the Nikah ceremony
           </div>
 
-          <div className="bride-groom-names">Riyasdeen & Athifa</div>
+          <div className="bride-groom-names">Arifin & Naseeha</div>
 
           <div className="event-detail">
             <div className="detail-label">Date</div>
-            <div className="detail-value">Sunday, 29 March 2026</div>
+            <div className="detail-value">Sunday, 27 December 2026</div>
           </div>
 
           <div className="event-detail">
             <div className="detail-label">Time</div>
-            <div className="detail-value">11:00 AM - 12:00 PM</div>
+            <div className="detail-value">11:00 AM - 12:30 PM</div>
           </div>
 
           <div className="event-detail">
             <div className="detail-label">Venue</div>
             <div className="detail-value">
-              Yafa Mahal <br />
-              Kenikarai, Ramanathapuram
+              Kader Deluxe Mahal <br />
+              Ramanathapuram
             </div>
           </div>
 
@@ -369,42 +356,56 @@ onClick={() => {
         <div className="guestbook-section reveal">
           <div className="guestbook-title">Guestbook</div>
 
-          <div className="wish-preview">
-            {wishes.length > 0 && (
-              <div key={currentWishIndex} className="wish-slide">
+          {wishes.length === 0 ? (
+            <div className="wish-preview">
+              <div className="wish-slide">
                 <div className="wish-message-preview">
-                  {wishes[currentWishIndex].message}
-                </div>
-                <div className="wish-author-preview">
-                  -{wishes[currentWishIndex].name}-
+                  Be the first to share your duas and wishes for the couple.
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <>
+              <div className="wish-preview">
+                <div key={currentWishIndex} className="wish-slide">
+                  <div className="wish-message-preview">
+                    {wishes[currentWishIndex].message}
+                  </div>
+                  <div className="wish-author-preview">
+                    -{wishes[currentWishIndex].name}-
+                  </div>
+                </div>
+              </div>
 
-          <div className="dot-separator">
-            {wishes.map((_, i) => (
-              <span
-                key={i}
-                className={`dot ${i === currentWishIndex ? "active-dot" : ""}`}
-                onClick={() => setCurrentWishIndex(i)}
-              ></span>
-            ))}
-          </div>
+              <div className="dot-separator">
+                {wishes.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`dot ${
+                      i === currentWishIndex ? "active-dot" : ""
+                    }`}
+                    onClick={() => setCurrentWishIndex(i)}
+                  ></span>
+                ))}
+              </div>
+            </>
+          )}
 
           <button className="wish-button" onClick={() => setShowWishForm(true)}>
             <span>✎</span>
             <span>Wish</span>
           </button>
 
-          <div className="wishes-list">
-            {wishes.map((wish, i) => (
-              <div key={i} className="wish-item">
-                <div className="wish-message">{wish.message}</div>
-                <div className="wish-author">-{wish.name}-</div>
-              </div>
-            ))}
-          </div>
+          {wishes.length > 0 && (
+            <div className="wishes-list">
+              {wishes.map((wish, i) => (
+                <div key={i} className="wish-item">
+                  <div className="wish-message">{wish.message}</div>
+                  <div className="wish-author">-{wish.name}-</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="decorative-divider"></div>
@@ -428,7 +429,7 @@ onClick={() => {
 
         {/* Footer */}
         <div className="footer reveal">
-          <div className="hashtag">#RiyasdeenWedAthifa</div>
+          <div className="hashtag">#Arifin❤️Naseeha</div>
 
           <div className="credits">
             Created by <br />
@@ -479,7 +480,47 @@ const CountdownUnit = ({ label, value }) => (
 
 // Calendar Modal
 const CalendarModal = ({ onClose }) => {
-  const nikahDate = new Date(2026, 2, 29)
+  const nikahDate = new Date(2026, 11, 27) // month is 0-based: 11 = December
+
+  const locationText = `${EVENT.venueName}, ${EVENT.venueArea}`
+
+  const addToGoogleCalendar = () => {
+    const url =
+      "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      `&text=${encodeURIComponent(EVENT.title)}` +
+      `&dates=${EVENT.startCal}/${EVENT.endCal}` +
+      `&details=${encodeURIComponent("You are cordially invited to the Nikah ceremony.")}` +
+      `&location=${encodeURIComponent(locationText)}`
+    window.open(url, "_blank")
+  }
+
+  const addToAppleCalendar = () => {
+    const ics = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Nikah Invitation//EN",
+      "BEGIN:VEVENT",
+      `UID:nikah-arifin-naseeha-${EVENT.startCal}@invitation`,
+      `DTSTAMP:${EVENT.startCal}`,
+      `DTSTART:${EVENT.startCal}`,
+      `DTEND:${EVENT.endCal}`,
+      `SUMMARY:${EVENT.title}`,
+      `LOCATION:${locationText}`,
+      "DESCRIPTION:You are cordially invited to the Nikah ceremony.",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n")
+
+    const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "nikah-invitation.ics"
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="modal active" onClick={onClose}>
@@ -489,7 +530,7 @@ const CalendarModal = ({ onClose }) => {
         </button>
 
         <div className="modal-title">Calendar</div>
-        <div className="calendar-date">Sunday, 29 March 2026</div>
+        <div className="calendar-date">Sunday, 27 December 2026</div>
 
         <Calendar
           value={nikahDate}
@@ -500,18 +541,17 @@ const CalendarModal = ({ onClose }) => {
           }
         />
 
-      <div className="calendar-buttons">
-  <button className="calendar-button">
-    <i className="fa-brands fa-apple"></i>
-    Add to Apple Calendar
-  </button>
+        <div className="calendar-buttons">
+          <button className="calendar-button" onClick={addToAppleCalendar}>
+            <i className="fa-brands fa-apple"></i>
+            Add to Apple Calendar
+          </button>
 
-  <button className="calendar-button">
-    <i className="fa-brands fa-google"></i>
-    Add to Google Calendar
-  </button>
-</div>
-
+          <button className="calendar-button" onClick={addToGoogleCalendar}>
+            <i className="fa-brands fa-google"></i>
+            Add to Google Calendar
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -528,14 +568,16 @@ const LocationModal = ({ onClose }) => (
       <div className="modal-title">Location</div>
 
       <div className="location-venue">
-        Yafa Mahal <br />
-        Kenikarai, Ramanathapuram
+        Kader Deluxe Mahal <br />
+        Ramanathapuram
       </div>
 
       <div className="map-container">
         <iframe
           title="Nikah Location Map"
-          src="https://www.google.com/maps?q=Yafa+Mahal+Kenikarai+Ramanathapuram&output=embed"
+          src={`https://www.google.com/maps?q=${encodeURIComponent(
+            MAP_QUERY
+          )}&output=embed`}
           width="100%"
           height="250"
           style={{ border: 0, borderRadius: "12px" }}
@@ -549,7 +591,9 @@ const LocationModal = ({ onClose }) => (
           className="location-button"
           onClick={() =>
             window.open(
-              "https://www.google.com/maps/search/Yafa+Mahal+Kenikarai+Ramanathapuram",
+              `https://www.google.com/maps/search/${encodeURIComponent(
+                MAP_QUERY
+              )}`,
               "_blank"
             )
           }
@@ -561,7 +605,7 @@ const LocationModal = ({ onClose }) => (
           className="location-button"
           onClick={() =>
             window.open(
-              "https://waze.com/ul?q=Yafa%20Mahal%20Kenikarai%20Ramanathapuram",
+              `https://waze.com/ul?q=${encodeURIComponent(MAP_QUERY)}`,
               "_blank"
             )
           }
@@ -613,4 +657,3 @@ const WishModal = ({ form, setForm, onSubmit, onClose }) => (
 )
 
 export default App
- 
