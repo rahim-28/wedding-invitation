@@ -1311,3 +1311,278 @@ body {
   font-size: 18px;
   margin-right: 10px;
 }
+/* ---------- ENVELOPE OPENING ---------- */
+.envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  color: #f3e6d8;
+  background: radial-gradient(circle at 50% 40%, #4a2e1f 0%, #24140c 75%);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.envelope-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+.env-bismillah {
+  font-size: 26px;
+  color: #d9b98f;
+  margin-bottom: 38px;
+}
+
+/* envelope */
+.env {
+  position: relative;
+  width: min(78vw, 340px);
+  aspect-ratio: 3 / 2;
+  margin-bottom: 38px;
+}
+.env-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #a9794f, #85583a);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* the card inside */
+.env-card {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 6%;
+  height: 88%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding-top: 12px;
+  border-radius: 4px;
+  background: #faf6f0;
+  color: #b88968;
+  transition: transform 1s ease 0.55s;
+}
+.env-card-small {
+  font-family: Arial, sans-serif;
+  font-size: 7px;
+  letter-spacing: 3px;
+}
+.env-card-names {
+  font-size: 20px;
+}
+.env.open .env-card {
+  transform: translateY(-48%);
+}
+
+/* front pocket */
+.env-front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #b88968, #96673f);
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+
+/* top flap */
+.env-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  z-index: 4;
+  background: linear-gradient(180deg, #c9a07a, #a9794f);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.7s ease, z-index 0s 0.35s;
+}
+.env.open .env-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+/* gold seal */
+.env-seal {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  z-index: 5;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #6b4a22;
+  background: radial-gradient(circle at 35% 30%, #f1d9a0, #c9a24f 70%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease, transform 0.5s ease;
+}
+.env.open .env-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+/* text under envelope */
+.env-label {
+  font-size: 13px;
+  letter-spacing: 6px;
+  color: #d9b98f;
+  margin-bottom: 14px;
+}
+.env-names {
+  font-size: clamp(32px, 9vw, 46px);
+  line-height: 1.1;
+}
+.env-date {
+  margin-top: 10px;
+  font-size: 16px;
+  font-style: italic;
+  color: #e6d2b8;
+}
+.env-tap {
+  margin-top: 28px;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #b88968;
+  animation: tapPulse 1.8s ease-in-out infinite;
+}
+@keyframes tapPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+/* ---------- MATCH ENVELOPE THEME ---------- */
+body {
+  background: radial-gradient(circle at 50% 30%, #4a2e1f 0%, #24140c 80%) fixed !important;
+}
+
+.main-content {
+  background: transparent !important;
+}
+
+/* gold frame + corner diamonds inside the top card */
+.hero-arch {
+  position: relative;
+}
+
+.hero-arch::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(201, 162, 126, 0.7);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.hero-arch::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  background: #c9a27e;
+  transform: translateX(-50%) rotate(45deg);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+/* ---------- ISLAMIC BLESSING ---------- */
+.blessing-section {
+  text-align: center;
+  padding: 30px 22px;
+}
+
+.blessing-title {
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: #b88968;
+  margin-bottom: 22px;
+}
+
+.blessing-arabic {
+  font-size: 28px;
+  line-height: 2;
+  color: #8a5f3d;
+  margin-bottom: 12px;
+}
+
+.blessing-translit {
+  font-size: 15px;
+  font-style: italic;
+  color: #a9794f;
+  line-height: 1.6;
+}
+
+.blessing-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 22px auto;
+}
+.blessing-divider span {
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a27e, transparent);
+}
+.blessing-divider i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #b88968;
+  transform: rotate(45deg);
+}
+
+.blessing-meaning {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #7a5a40;
+  margin-bottom: 26px;
+}
+
+.blessing-explain {
+  text-align: left;
+  padding: 18px 20px;
+  border: 1px solid rgba(184, 137, 104, 0.4);
+  border-radius: 16px;
+  background: rgba(184, 137, 104, 0.07);
+}
+.blessing-explain-title {
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #b88968;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.blessing-explain p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #6d5340;
+  margin: 0 0 10px;
+}
+.blessing-explain p:last-child {
+  margin-bottom: 0;
+}

@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import "./App.css"
-import { MapPin, CalendarDays, Pause, Play } from "lucide-react"
+import { MapPin, CalendarDays } from "lucide-react"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
-import nikahSong from "./assets/nikah.mp3"
 import "@fortawesome/fontawesome-free/css/all.min.css"
 
 // ---------- EVENT DETAILS (edit here in future) ----------
-const STORAGE_KEY = "nikah_wishes_arifin_naseeha_v2"
 const EVENT = {
   title: "Nikah of Arifin & Naseeha",
   venueName: "Kader Deluxe Mahal",
@@ -22,6 +20,10 @@ function App() {
   const [isOpen, setIsOpen] = useState(false)
   const [showMain, setShowMain] = useState(false)
 
+  // Envelope opening states
+  const [envOpening, setEnvOpening] = useState(false)
+  const [envLeaving, setEnvLeaving] = useState(false)
+
   const [countdown, setCountdown] = useState({
     days: "00",
     hours: "00",
@@ -29,30 +31,10 @@ function App() {
     seconds: "00",
   })
 
-  const [wishes, setWishes] = useState([])
   const [showCalendar, setShowCalendar] = useState(false)
   const [showLocation, setShowLocation] = useState(false)
-  const [showWishForm, setShowWishForm] = useState(false)
-  const [wishForm, setWishForm] = useState({ name: "", message: "" })
-  const [currentWishIndex, setCurrentWishIndex] = useState(0)
 
   const [hearts, setHearts] = useState([])
-
-  // 🎵 MUSIC
-  const audioRef = useRef(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-
-  // Load wishes (starts empty, no sample wishes)
-  useEffect(() => {
-    try {
-      const savedWishes = localStorage.getItem(STORAGE_KEY)
-      if (savedWishes) {
-        setWishes(JSON.parse(savedWishes))
-      }
-    } catch (err) {
-      setWishes([])
-    }
-  }, [])
 
   // Countdown
   useEffect(() => {
@@ -121,95 +103,49 @@ function App() {
     setHearts(generated)
   }, [])
 
-  // Auto wish slider
-  useEffect(() => {
-    if (wishes.length === 0) return
+  // ✉️ Envelope tap
+  const handleEnvelopeOpen = () => {
+    if (envOpening) return
+    setEnvOpening(true) // flap opens, card rises
 
-    const interval = setInterval(() => {
-      setCurrentWishIndex((prev) => (prev + 1) % wishes.length)
-    }, 4000)
+    setTimeout(() => setEnvLeaving(true), 1500) // screen fades out
 
-    return () => clearInterval(interval)
-  }, [wishes])
-
-  // 🎵 Toggle music play/pause
-  const toggleMusic = () => {
-    if (!audioRef.current) return
-
-    if (isPlaying) {
-      audioRef.current.pause()
-      setIsPlaying(false)
-    } else {
-      audioRef.current.play()
-      setIsPlaying(true)
-    }
+    setTimeout(() => {
+      setIsOpen(true)
+      setShowMain(true)
+    }, 2400)
   }
 
-  // Wish submit
-  const handleWishSubmit = (e) => {
-    e.preventDefault()
-
-    if (!wishForm.name.trim() || !wishForm.message.trim()) {
-      alert("Please fill all fields properly.")
-      return
-    }
-
-    const newWishes = [
-      { name: wishForm.name.trim(), message: wishForm.message.trim() },
-      ...wishes,
-    ]
-
-    setWishes(newWishes)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newWishes))
-
-    setWishForm({ name: "", message: "" })
-    setShowWishForm(false)
-    setCurrentWishIndex(0)
-
-    alert("JazakAllah Khair! Your wishes have been shared. ❤️")
-  }
-
-  // OPEN SCREEN
+  // OPEN SCREEN (envelope)
   if (!isOpen) {
     return (
-      <div className="opening-screen">
-        <div className="opening-content">
-          <div className="opening-bismillah">
-            بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
-          </div>
-
-          <div className="opening-title">THE SOLEMNISATION OF NIKAH</div>
-
-          <div className="opening-names">
-            Arifin
-            <span className="opening-ampersand">&</span>
-            Naseeha
-          </div>
-
-          <button
-            className="open-button"
-            onClick={() => {
-              document
-                .querySelector(".opening-screen")
-                ?.classList.add("fade-out")
-
-              setTimeout(() => {
-                setIsOpen(true)
-                setShowMain(true)
-
-                setTimeout(() => {
-                  if (audioRef.current) {
-                    audioRef.current.volume = 0.6
-                    audioRef.current.play()
-                    setIsPlaying(true)
-                  }
-                }, 300)
-              }, 900)
-            }}
-          >
-            OPEN
-          </button>
+      <div
+        className={`envelope-screen ${envLeaving ? "fade-out" : ""}`}
+        onClick={handleEnvelopeOpen}
+      >
+        <div className="env-bismillah">
+          بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
         </div>
+
+        <div className={`env ${envOpening ? "open" : ""}`}>
+          <div className="env-back"></div>
+
+          <div className="env-card">
+            <span className="env-card-small">THE SOLEMNISATION OF NIKAH</span>
+            <span className="env-card-names">Arifin &amp; Naseeha</span>
+          </div>
+
+          <div className="env-front"></div>
+          <div className="env-flap"></div>
+          <div className="env-seal">A&amp;N</div>
+        </div>
+
+        <div className="env-label">YOU ARE INVITED</div>
+        <div className="env-names">Arifin &amp; Naseeha</div>
+        <div className="env-date">
+          The Solemnisation of Nikah · 27 December 2026
+        </div>
+        <div className="env-tap">TAP TO OPEN</div>
       </div>
     )
   }
@@ -253,22 +189,6 @@ function App() {
             <div className="event-venue-hero">Kader Deluxe Mahal</div>
           </div>
         </div>
-
-        {/* 🎵 Music Player */}
-        <div className="music-wrapper reveal">
-          <div className="music-player" onClick={toggleMusic}>
-            <span className="music-icon">
-              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </span>
-
-            <span className="music-text">
-              Halal Wedding Nasheed - Alhamdulillah
-            </span>
-
-            <span className="music-dots">•••</span>
-          </div>
-        </div>
-        <audio ref={audioRef} src={nikahSong} loop />
 
         {/* Content Section */}
         <div className="content-section reveal">
@@ -352,60 +272,43 @@ function App() {
 
         <div className="decorative-divider"></div>
 
-        {/* Guestbook */}
-        <div className="guestbook-section reveal">
-          <div className="guestbook-title">Guestbook</div>
+        {/* Islamic Blessing */}
+        <div className="blessing-section reveal">
+          <div className="blessing-title">Barakallahu Lakuma</div>
 
-          {wishes.length === 0 ? (
-            <div className="wish-preview">
-              <div className="wish-slide">
-                <div className="wish-message-preview">
-                  Be the first to share your duas and wishes for the couple.
-                </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="wish-preview">
-                <div key={currentWishIndex} className="wish-slide">
-                  <div className="wish-message-preview">
-                    {wishes[currentWishIndex].message}
-                  </div>
-                  <div className="wish-author-preview">
-                    -{wishes[currentWishIndex].name}-
-                  </div>
-                </div>
-              </div>
+          <div className="blessing-arabic" dir="rtl">
+            بَارَكَ اللَّهُ لَكَ وَبَارَكَ عَلَيْكَ وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ
+          </div>
 
-              <div className="dot-separator">
-                {wishes.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`dot ${
-                      i === currentWishIndex ? "active-dot" : ""
-                    }`}
-                    onClick={() => setCurrentWishIndex(i)}
-                  ></span>
-                ))}
-              </div>
-            </>
-          )}
+          <div className="blessing-translit">
+            Bārakallāhu laka wa bāraka ʿalayka wa jamaʿa baynakumā fī khayr
+          </div>
 
-          <button className="wish-button" onClick={() => setShowWishForm(true)}>
-            <span>✎</span>
-            <span>Wish</span>
-          </button>
+          <div className="blessing-divider">
+            <span></span>
+            <i></i>
+            <span></span>
+          </div>
 
-          {wishes.length > 0 && (
-            <div className="wishes-list">
-              {wishes.map((wish, i) => (
-                <div key={i} className="wish-item">
-                  <div className="wish-message">{wish.message}</div>
-                  <div className="wish-author">-{wish.name}-</div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="blessing-meaning">
+            “May Allah bless you, shower His blessings upon you, and unite you
+            both in goodness.”
+          </div>
+
+          <div className="blessing-explain">
+            <div className="blessing-explain-title">What does it mean?</div>
+            <p>
+              <strong>Barakah</strong> means divine blessing: goodness that grows,
+              lasts, and brings peace to a home. When we say{" "}
+              <em>Barakallahu lakuma</em>, we ask Allah to place that blessing in
+              the marriage, in the home, and in the hearts of the couple.
+            </p>
+            <p>
+              This is the dua taught by the Prophet ﷺ for a newly married
+              couple, and it is reported in Sunan Abi Dawud and Jami‘ at-Tirmidhi.
+              We would be honoured if you made this dua for us.
+            </p>
+          </div>
         </div>
 
         <div className="decorative-divider"></div>
@@ -454,15 +357,6 @@ function App() {
       {/* Modals */}
       {showCalendar && <CalendarModal onClose={() => setShowCalendar(false)} />}
       {showLocation && <LocationModal onClose={() => setShowLocation(false)} />}
-
-      {showWishForm && (
-        <WishModal
-          form={wishForm}
-          setForm={setWishForm}
-          onSubmit={handleWishSubmit}
-          onClose={() => setShowWishForm(false)}
-        />
-      )}
     </div>
   )
 }
@@ -613,45 +507,6 @@ const LocationModal = ({ onClose }) => (
           🚗 Waze
         </button>
       </div>
-    </div>
-  </div>
-)
-
-// Wish Modal
-const WishModal = ({ form, setForm, onSubmit, onClose }) => (
-  <div className="modal active" onClick={onClose}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <button className="modal-close" onClick={onClose}>
-        ×
-      </button>
-
-      <div className="modal-title">Share Your Wishes</div>
-
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label>Your Name *</label>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Your Message *</label>
-          <textarea
-            value={form.message}
-            onChange={(e) => setForm({ ...form, message: e.target.value })}
-            required
-            placeholder="Barakallahu feekum..."
-          />
-        </div>
-
-        <button type="submit" className="submit-button">
-          Send Wishes
-        </button>
-      </form>
     </div>
   </div>
 )
