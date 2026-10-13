@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import "./App.css"
-import { MapPin, CalendarDays } from "lucide-react"
+import { MapPin, CalendarDays, Clock } from "lucide-react"
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import "@fortawesome/fontawesome-free/css/all.min.css"
@@ -172,23 +172,64 @@ function App() {
 
       <div className="main-card">
         {/* Hero Section */}
-        <div className="hero-arch">
-          <div className="hero-content reveal">
-            <div className="hero-title">THE SOLEMNISATION OF NIKAH</div>
+        {/* Hero Section */}
+<div className="hero-arch">
+  <div className="hero-content reveal">
+    {/* Islamic decoration */}
+    <div className="hero-decor">
+      {/* left lantern */}
+      <svg className="lantern lantern-left" viewBox="0 0 40 80" width="38" height="76" fill="none">
+        <line x1="20" y1="0" x2="20" y2="16" stroke="#b88968" strokeWidth="1.2" />
+        <path d="M11 24 L20 15 L29 24 Z" fill="#c9a27e" />
+        <path d="M11 24 H29 L32 46 Q32 54 20 60 Q8 54 8 46 Z" fill="rgba(201,162,126,0.22)" stroke="#b88968" strokeWidth="1.2" />
+        <line x1="15" y1="24" x2="14" y2="56" stroke="#b88968" strokeWidth="0.8" />
+        <line x1="25" y1="24" x2="26" y2="56" stroke="#b88968" strokeWidth="0.8" />
+        <circle cx="20" cy="42" r="4" fill="#f1d9a0" />
+        <path d="M15 60 H25 L20 68 Z" fill="#b88968" />
+      </svg>
 
-            <div className="couple-names">
-              Arifin
-              <span className="couple-ampersand">&</span>
-              Naseeha
-            </div>
+      {/* crescent and star */}
+      {/* crescent */}
+<svg className="crescent" viewBox="0 0 64 64" width="54" height="54" fill="none">
+  <path
+    d="M44 6 A26 26 0 1 0 44 58 A20 20 0 1 1 44 6 Z"
+    fill="#b88968"
+  />
+</svg>
 
-            <div className="event-date-hero">
-              Sunday <br /> 27 December 2026
-            </div>
+      {/* right lantern */}
+      <svg className="lantern lantern-right" viewBox="0 0 40 80" width="38" height="76" fill="none">
+        <line x1="20" y1="0" x2="20" y2="16" stroke="#b88968" strokeWidth="1.2" />
+        <path d="M11 24 L20 15 L29 24 Z" fill="#c9a27e" />
+        <path d="M11 24 H29 L32 46 Q32 54 20 60 Q8 54 8 46 Z" fill="rgba(201,162,126,0.22)" stroke="#b88968" strokeWidth="1.2" />
+        <line x1="15" y1="24" x2="14" y2="56" stroke="#b88968" strokeWidth="0.8" />
+        <line x1="25" y1="24" x2="26" y2="56" stroke="#b88968" strokeWidth="0.8" />
+        <circle cx="20" cy="42" r="4" fill="#f1d9a0" />
+        <path d="M15 60 H25 L20 68 Z" fill="#b88968" />
+      </svg>
+    </div>
 
-            <div className="event-venue-hero">Kader Deluxe Mahal</div>
-          </div>
-        </div>
+    <div className="hero-title">THE SOLEMNISATION OF NIKAH</div>
+
+    <div className="couple-names">
+      Arifin
+      <span className="couple-ampersand">&</span>
+      Naseeha
+    </div>
+
+    <div className="hero-ornament">
+      <span></span>
+      <i></i>
+      <span></span>
+    </div>
+
+    <div className="event-date-hero">
+      Sunday <br /> 27 December 2026
+    </div>
+
+    <div className="event-venue-hero">Kader Deluxe Mahal</div>
+  </div>
+</div>
 
         {/* Content Section */}
         <div className="content-section reveal">
@@ -229,21 +270,39 @@ function App() {
 
           <div className="bride-groom-names">Arifin & Naseeha</div>
 
-          <div className="event-detail">
-            <div className="detail-label">Date</div>
-            <div className="detail-value">Sunday, 27 December 2026</div>
-          </div>
+          {/* Date / Time / Venue cards */}
+          <div className="detail-cards">
+            <div className="detail-card">
+              <CalendarDays
+                size={34}
+                strokeWidth={1.3}
+                className="detail-card-icon"
+              />
+              <div className="detail-card-label">DATE</div>
+              <div className="detail-card-value">
+                27th <br /> December
+              </div>
+              <div className="detail-card-sub">Sunday · 2026</div>
+            </div>
 
-          <div className="event-detail">
-            <div className="detail-label">Time</div>
-            <div className="detail-value">11:00 AM - 12:30 PM</div>
-          </div>
+            <div className="detail-card detail-card-highlight">
+              <Clock size={34} strokeWidth={1.3} className="detail-card-icon" />
+              <div className="detail-card-label">TIME</div>
+              <div className="detail-card-value">11:00 AM</div>
+              <div className="detail-card-sub">to 12:30 PM</div>
+            </div>
 
-          <div className="event-detail">
-            <div className="detail-label">Venue</div>
-            <div className="detail-value">
-              Kader Deluxe Mahal <br />
-              Ramanathapuram
+            <div className="detail-card">
+              <MapPin
+                size={34}
+                strokeWidth={1.3}
+                className="detail-card-icon"
+              />
+              <div className="detail-card-label">VENUE</div>
+              <div className="detail-card-value">
+                Kader Deluxe <br /> Mahal
+              </div>
+              <div className="detail-card-sub">Ramanathapuram</div>
             </div>
           </div>
 

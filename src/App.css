@@ -1586,3 +1586,134 @@ body {
 .blessing-explain p:last-child {
   margin-bottom: 0;
 }
+/* ---------- DETAIL CARDS ---------- */
+.detail-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 30px 0 10px;
+}
+
+.detail-card {
+  position: relative;
+  text-align: center;
+  padding: 26px 18px 24px;
+  border: 1px solid rgba(201, 162, 126, 0.5);
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fffdfa, #f8f0e8);
+  box-shadow: 0 10px 26px rgba(120, 80, 50, 0.1);
+}
+
+/* thin gold line across the top edge */
+.detail-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a27e, transparent);
+}
+
+.detail-card-highlight {
+  background: linear-gradient(180deg, #fdf6f2, #f6e6e0);
+  border-color: rgba(184, 137, 104, 0.7);
+}
+
+.detail-card-icon {
+  color: #c9a27e;
+  margin-bottom: 14px;
+}
+
+.detail-card-label {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: #b88968;
+  margin-bottom: 12px;
+}
+
+.detail-card-value {
+  font-size: 26px;
+  line-height: 1.25;
+  color: #6b4a35;
+  margin-bottom: 10px;
+}
+
+.detail-card-sub {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a08064;
+}
+
+/* wider screens: three cards in a row */
+@media (min-width: 900px) {
+  .detail-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .detail-card-value {
+    font-size: 22px;
+  }
+}
+/* ---------- HERO ISLAMIC DECOR ---------- */
+.hero-decor {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 18px;
+  padding: 0 6px;
+}
+
+.crescent {
+  margin-top: 14px;
+  animation: crescentFloat 4s ease-in-out infinite;
+}
+
+@keyframes crescentFloat {
+  0%, 100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 0 rgba(201, 162, 126, 0));
+  }
+  50% {
+    transform: translateY(-4px);
+    filter: drop-shadow(0 4px 8px rgba(201, 162, 126, 0.5));
+  }
+}
+
+/* lanterns sway from the top */
+.lantern {
+  transform-origin: 50% 0;
+  animation: lanternSway 3.6s ease-in-out infinite;
+}
+.lantern-right {
+  animation-delay: 0.8s;
+}
+
+@keyframes lanternSway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+/* small diamond divider under the names */
+.hero-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px auto;
+}
+.hero-ornament span {
+  display: block;
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a27e, transparent);
+}
+.hero-ornament i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #b88968;
+  transform: rotate(45deg);
+}
